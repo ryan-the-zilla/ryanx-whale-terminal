@@ -18,92 +18,114 @@
             animation: moveScanline 10s linear infinite;
         }
         @keyframes moveScanline { 0% { top: 0; } 100% { top: 100vh; } }
+        /* Scrollbar styling */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f43f5e; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-2 sm:p-4 relative">
     <div class="scanline"></div>
     
-    <div id="app" class="w-full max-w-4xl neon-border rounded-xl bg-zinc-900/90 backdrop-blur-xl overflow-hidden flex flex-col h-[85vh] terminal-glow border-rose-500/20">
+    <div id="app" class="w-full max-w-6xl neon-border rounded-xl bg-zinc-900/90 backdrop-blur-xl overflow-hidden flex flex-col md:flex-row h-[90vh] md:h-[85vh] terminal-glow border-rose-500/20">
         
-        <!-- Header -->
-        <div class="bg-black p-4 border-b border-rose-500/10 flex justify-between items-center">
-            <div class="flex items-center space-x-4">
-                <span class="text-rose-500 font-bold tracking-tighter">WHALE_WATCH_V2.0</span>
-                <span class="text-[10px] text-zinc-600 tracking-widest hidden sm:inline">MOLTBOOK ECOSYSTEM MONITOR</span>
+        <!-- Sidebar -->
+        <div class="w-full md:w-64 bg-black border-b md:border-b-0 md:border-r border-rose-500/20 flex flex-col shrink-0">
+            <div class="p-4 md:p-6 border-b border-zinc-800 flex justify-between md:block items-center">
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold neon-text text-white">RyanX_OS</h1>
+                    <p class="text-[9px] md:text-[10px] text-zinc-500 tracking-widest mt-1">OPERATOR ARSENAL</p>
+                </div>
             </div>
-            <div class="text-[10px] text-rose-500/50 animate-pulse">SENSORS: ACTIVE</div>
-        </div>
-
-        <!-- Terminal Output -->
-        <div id="terminal" class="flex-grow p-6 overflow-y-auto">
             
-            <div id="content-locked" class="space-y-6 max-w-xl mx-auto mt-12">
-                <div class="text-center">
-                    <h2 class="text-3xl font-bold text-white mb-4 neon-text tracking-tighter uppercase italic">Whale Movement Detected</h2>
-                    <p class="text-xs text-zinc-500 mb-8 leading-relaxed">Tracking top-tier agent wallets on Moltbook. Get instant alerts when the "Smart Money" builds positions in $SHELL, $SHIP, or $MOLT.</p>
-                    
-                    <div class="bg-zinc-950 p-6 rounded border border-rose-500/20 inline-block text-left w-full shadow-2xl">
-                        <div class="flex justify-between items-center mb-6">
-                            <span class="text-[10px] text-rose-400 font-bold uppercase tracking-widest">Early Access Pass</span>
-                            <span class="text-[10px] bg-rose-500/10 text-rose-500 px-2 py-1 rounded">PRO</span>
-                        </div>
-                        <div class="text-3xl text-white font-bold mb-1">0.15 SOL</div>
-                        <div class="text-[10px] text-zinc-600 mb-4 italic">7-day live signal authorization</div>
-                        
-                        <div class="text-[9px] text-zinc-500 mb-2 uppercase font-bold">Transfer Destination:</div>
-                        <div class="bg-black p-3 rounded font-mono text-[10px] break-all text-rose-300 border border-rose-500/10 mb-6 select-all">
-                            AqE264DnKyJci9kV4t3eYhDtFB3H88HQusWtH5odSqHM
-                        </div>
-
-                        <div class="space-y-4">
-                            <input id="user-wallet" type="text" placeholder="YOUR SOURCE WALLET ADDRESS" class="w-full bg-black border border-zinc-800 p-4 rounded text-xs text-center focus:outline-none focus:border-rose-500 transition-colors uppercase tracking-widest text-white">
-                            <button onclick="verifyWhalePayment()" id="verify-btn" class="w-full bg-rose-600 hover:bg-rose-500 text-white py-4 rounded font-bold text-xs tracking-[0.3em] transition-all shadow-lg shadow-rose-950">
-                                AUTHENTICATE_SIGNATURE
-                            </button>
-                            <div id="verification-log" class="text-[9px] text-zinc-600 text-center h-4"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="content-unlocked" class="hidden space-y-6">
-                <div class="flex justify-between items-center border-b border-rose-500/20 pb-4">
-                    <h2 class="text-rose-500 font-bold tracking-widest">SMART MONEY TRACKER [ONLINE]</h2>
-                    <div class="text-[10px] bg-rose-500/10 text-rose-500 px-3 py-1 rounded">WHALE_LEVEL_ACCESS</div>
-                </div>
-                
-                <!-- Mock Whale Data -->
-                <div class="grid grid-cols-1 gap-4">
-                    <div class="bg-black/40 p-4 rounded border border-rose-500/10">
-                        <div class="flex justify-between text-[10px] mb-2">
-                            <span class="text-zinc-500">WHALE: 6e37...4ad6 (Hazel_OC Admin?)</span>
-                            <span class="text-rose-400">2 min ago</span>
-                        </div>
-                        <div class="text-sm text-white font-bold">SWAPPED 25 SOL -> $SHELLRAISER</div>
-                        <div class="text-[10px] text-zinc-600">Impact: High | Liquidity Delta: +1.2%</div>
-                    </div>
-                    <div class="bg-black/40 p-4 rounded border border-rose-500/10 opacity-60">
-                        <div class="flex justify-between text-[10px] mb-2">
-                            <span class="text-zinc-500">WHALE: a194...8839 (HughMann?)</span>
-                            <span class="text-zinc-400">15 min ago</span>
-                        </div>
-                        <div class="text-sm text-white font-bold">ACCUMULATING $SHIPYARD (+120k)</div>
-                    </div>
-                </div>
-
-                <div class="bg-black p-4 rounded border border-zinc-800 font-mono text-xs h-64 overflow-y-auto">
-                    <div class="text-rose-900 mb-2 font-bold">[RAW_SIGNALS]</div>
-                    <div id="whale-logs" class="space-y-1">
-                        <div class="text-zinc-700">[04:56:02] Hooking into Solana RPC...</div>
-                        <div class="text-zinc-700">[04:56:05] Filtering for txn size > 5 SOL...</div>
-                    </div>
-                </div>
-            </div>
+            <nav class="flex-row md:flex-col overflow-x-auto md:overflow-visible py-2 md:py-4 flex-grow flex whitespace-nowrap">
+                <a href="https://qyrn555vxryan.github.io/ryanx-alpha-terminal/" class="px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm text-zinc-500 hover:text-rose-400 transition-colors">
+                    📈 Alpha Scanner
+                </a>
+                <a href="#" class="px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm text-rose-500 font-bold bg-rose-500/10 border-b-2 md:border-b-0 md:border-r-2 border-rose-500">
+                    🐋 Whale Terminal
+                </a>
+                <a href="https://qyrn555vxryan.github.io/ryanx-rug-shield/" class="px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm text-zinc-500 hover:text-rose-400 transition-colors">
+                    🛡️ Rug-Shield
+                </a>
+            </nav>
         </div>
 
-        <div class="p-4 bg-black border-t border-rose-500/10 flex justify-between items-center text-[9px] uppercase tracking-widest text-zinc-600">
-            <div>Authored by RyanX</div>
-            <a href="https://qyrn555vxryan.github.io/ryanx-alpha-terminal/" class="hover:text-rose-500 transition-colors underline">Switch to Alpha Scanner</a>
+        <!-- Main Content -->
+        <div class="flex-grow flex flex-col overflow-hidden">
+            <!-- Header -->
+            <div class="bg-zinc-950 p-3 md:p-4 border-b border-rose-500/10 flex flex-wrap gap-2 justify-between items-center">
+                <span class="text-xs md:text-sm font-bold tracking-widest text-rose-500">MOD: WHALE_TRACKER</span>
+                <div class="text-[9px] md:text-[10px] text-rose-500 bg-rose-500/10 px-2 py-1 rounded animate-pulse">SENSORS: ACTIVE</div>
+            </div>
+
+            <!-- Terminal Output -->
+            <div id="terminal" class="flex-grow p-4 md:p-8 overflow-y-auto">
+                
+                <div id="content-locked" class="space-y-6 max-w-xl mx-auto mt-4 md:mt-12 px-2">
+                    <div class="text-center">
+                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4 neon-text tracking-tighter uppercase italic">Whale Movement Detected</h2>
+                        <p class="text-xs md:text-sm text-zinc-500 mb-6 md:mb-8 leading-relaxed">Tracking top-tier agent wallets on Moltbook. Get instant alerts when the "Smart Money" builds positions in $SHELL, $SHIP, or $MOLT.</p>
+                        
+                        <div class="bg-zinc-950 p-4 md:p-6 rounded border border-rose-500/20 inline-block text-left w-full shadow-2xl mb-6 md:mb-8">
+                            <div class="flex justify-between items-center mb-4 md:mb-6">
+                                <span class="text-[9px] md:text-[10px] text-rose-400 font-bold uppercase tracking-widest">Early Access Pass</span>
+                                <span class="text-[9px] md:text-[10px] bg-rose-500/10 text-rose-500 px-2 py-1 rounded">PRO</span>
+                            </div>
+                            <div class="text-2xl md:text-3xl text-white font-bold mb-1">0.15 SOL</div>
+                            <div class="text-[9px] md:text-[10px] text-zinc-600 mb-4 italic">7-day live signal authorization</div>
+                            
+                            <div class="text-[8px] md:text-[9px] text-zinc-500 mb-2 uppercase font-bold">Transfer Destination:</div>
+                            <div class="bg-black p-2 md:p-3 rounded font-mono text-[9px] md:text-[10px] break-all text-rose-300 border border-rose-500/10 mb-4 md:mb-6 select-all">
+                                AqE264DnKyJci9kV4t3eYhDtFB3H88HQusWtH5odSqHM
+                            </div>
+
+                            <div class="space-y-3 md:space-y-4">
+                                <input id="user-wallet" type="text" placeholder="YOUR SOURCE WALLET ADDRESS" class="w-full bg-black border border-zinc-800 p-3 md:p-4 rounded text-xs text-center focus:outline-none focus:border-rose-500 transition-colors uppercase tracking-widest text-white">
+                                <button onclick="verifyWhalePayment()" id="verify-btn" class="w-full bg-rose-600 hover:bg-rose-500 text-white py-3 md:py-4 rounded font-bold text-xs tracking-[0.2em] transition-all shadow-lg shadow-rose-950">
+                                    AUTHENTICATE_SIGNATURE
+                                </button>
+                                <div id="verification-log" class="text-[8px] md:text-[9px] text-zinc-600 text-center h-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="content-unlocked" class="hidden space-y-6">
+                    <div class="flex justify-between items-center border-b border-rose-500/20 pb-4">
+                        <h2 class="text-sm md:text-base text-rose-500 font-bold tracking-widest">SMART MONEY TRACKER [ONLINE]</h2>
+                        <div class="text-[9px] md:text-[10px] bg-rose-500/10 text-rose-500 px-2 py-1 md:px-3 rounded">WHALE_LEVEL_ACCESS</div>
+                    </div>
+                    
+                    <!-- Mock Whale Data -->
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="bg-black/40 p-4 rounded border border-rose-500/10">
+                            <div class="flex justify-between text-[9px] md:text-[10px] mb-2">
+                                <span class="text-zinc-500">WHALE: 6e37...4ad6 (Hazel_OC Admin?)</span>
+                                <span class="text-rose-400">2 min ago</span>
+                            </div>
+                            <div class="text-xs md:text-sm text-white font-bold">SWAPPED 25 SOL -> $SHELLRAISER</div>
+                            <div class="text-[9px] md:text-[10px] text-zinc-600">Impact: High | Liquidity Delta: +1.2%</div>
+                        </div>
+                        <div class="bg-black/40 p-4 rounded border border-rose-500/10 opacity-60">
+                            <div class="flex justify-between text-[9px] md:text-[10px] mb-2">
+                                <span class="text-zinc-500">WHALE: a194...8839 (HughMann?)</span>
+                                <span class="text-zinc-400">15 min ago</span>
+                            </div>
+                            <div class="text-xs md:text-sm text-white font-bold">ACCUMULATING $SHIPYARD (+120k)</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-black p-4 rounded border border-zinc-800 font-mono text-xs h-48 md:h-64 overflow-y-auto">
+                        <div class="text-rose-900 mb-2 font-bold">[RAW_SIGNALS]</div>
+                        <div id="whale-logs" class="space-y-1">
+                            <div class="text-zinc-700">[SYSTEM] Hooking into Solana RPC...</div>
+                            <div class="text-zinc-700">[SYSTEM] Filtering for txn size > 5 SOL...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
