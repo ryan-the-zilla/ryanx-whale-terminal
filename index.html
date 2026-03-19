@@ -20,6 +20,11 @@
         }
         @keyframes moveScanline { 0% { top: 0; } 100% { top: 100vh; } }
         .nav-item.active { background-color: rgba(244, 63, 94, 0.1); border-right: 2px solid #f43f5e; color: #f43f5e; }
+        
+        /* Pricing Button Styles */
+        .price-btn { transition: all 0.2s ease; }
+        .price-btn:hover { transform: translateY(-2px); }
+        .price-btn.selected { ring: 2px; ring-color: #f43f5e; }
     </style>
 </head>
 <body class="min-h-screen bg-[#050505] p-2 sm:p-4 relative flex flex-col">
@@ -59,33 +64,67 @@
                     <h2 class="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4 neon-text tracking-tighter uppercase italic">Whale Movement Detected</h2>
                     <p class="text-xs md:text-sm text-zinc-500 mb-6 md:mb-8 leading-relaxed">Tracking top-tier agent wallets on Moltbook. Get instant alerts when the "Smart Money" moves.</p>
                     
-                    <!-- Pricing -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
-                        <div class="bg-black/50 p-4 rounded border border-zinc-800 text-center">
-                            <div class="text-[9px] text-zinc-500 uppercase">7-Day</div>
-                            <div class="text-lg text-white font-bold">0.1 SOL</div>
+                    <!-- 🔥 PAY WHAT YOU WANT SECTION -->
+                    <div id="pwyw-section" class="bg-gradient-to-b from-rose-900/20 to-zinc-900/50 p-4 md:p-6 rounded-lg border border-rose-500/30 text-left w-full shadow-lg mb-6">
+                        <div class="text-center mb-4">
+                            <div class="text-lg text-white font-bold mb-1">Pay What You Want</div>
+                            <div class="text-[10px] text-rose-400 uppercase tracking-widest">Minimum 0.05 SOL • Lifetime Access</div>
                         </div>
-                        <div class="bg-rose-900/20 p-4 rounded border border-rose-500/50 text-center">
-                            <div class="text-[9px] text-rose-400 uppercase">Lifetime</div>
-                            <div class="text-lg text-white font-bold">0.2 SOL</div>
+                        
+                        <!-- Preset Amount Buttons -->
+                        <div class="grid grid-cols-4 gap-2 mb-4">
+                            <button onclick="selectAmount(0.05)" class="price-btn bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 p-3 rounded text-center" data-amount="0.05">
+                                <div class="text-[9px] text-zinc-400 uppercase">Min</div>
+                                <div class="text-sm text-white font-bold">0.05 SOL</div>
+                            </button>
+                            <button onclick="selectAmount(0.1)" class="price-btn bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/50 p-3 rounded text-center" data-amount="0.1">
+                                <div class="text-[9px] text-rose-400 uppercase">Suggested</div>
+                                <div class="text-sm text-white font-bold">0.1 SOL</div>
+                            </button>
+                            <button onclick="selectAmount(0.2)" class="price-btn bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 p-3 rounded text-center" data-amount="0.2">
+                                <div class="text-[9px] text-zinc-400 uppercase">Premium</div>
+                                <div class="text-sm text-white font-bold">0.2 SOL</div>
+                            </button>
+                            <button onclick="showCustomInput()" class="price-btn bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 p-3 rounded text-center" id="custom-btn">
+                                <div class="text-[9px] text-zinc-400 uppercase">Custom</div>
+                                <div class="text-sm text-white font-bold">💎</div>
+                            </button>
                         </div>
-                        <div class="bg-black/50 p-4 rounded border border-zinc-800 text-center">
-                            <div class="text-[9px] text-zinc-500 uppercase">Founder</div>
-                            <div class="text-lg text-white font-bold">1.0 SOL</div>
+                        
+                        <!-- Custom Amount Input (hidden by default) -->
+                        <div id="custom-input-container" class="hidden mb-4">
+                            <input type="number" id="custom-amount" min="0.05" step="0.01" placeholder="Enter amount (min 0.05 SOL)" 
+                                   class="w-full bg-zinc-950 border border-rose-500/50 p-3 rounded text-sm text-white text-center focus:outline-none"
+                                   oninput="updateCustomAmount()">
+                            <div class="text-[9px] text-zinc-500 mt-1 text-center">Minimum 0.05 SOL required</div>
                         </div>
-                    </div>
-
-                    <div class="bg-black/80 p-4 rounded border border-rose-500/20 text-left mb-6">
-                        <div class="text-[9px] text-zinc-500 uppercase font-bold mb-1">Send SOL to:</div>
-                        <div class="font-mono text-[10px] md:text-xs break-all text-rose-300">AqE264DnKyJci9kV4t3eYhDtFB3H88HQusWtH5odSqHM</div>
-                    </div>
-
-                    <div class="space-y-3">
-                        <input id="user-wallet" type="text" placeholder="PASTE YOUR WALLET ADDRESS" class="w-full bg-black border border-zinc-800 p-3 rounded text-xs text-center text-white focus:border-rose-500 outline-none">
+                        
+                        <!-- Selected Amount Display -->
+                        <div class="bg-zinc-950 p-3 rounded border border-zinc-700 mb-3 text-center">
+                            <div class="text-[9px] text-zinc-500 uppercase mb-1">Selected Amount</div>
+                            <div id="selected-amount" class="text-2xl text-rose-400 font-bold">0.1 SOL</div>
+                            <div id="usd-equivalent" class="text-[10px] text-zinc-500">≈ $-- USD</div>
+                        </div>
+                        
+                        <!-- Wallet Address -->
+                        <div class="text-[9px] text-zinc-500 mb-1 uppercase font-bold">Send SOL to:</div>
+                        <div class="bg-zinc-950 p-2 rounded font-mono text-[9px] break-all text-rose-300 border border-rose-500/20 select-all mb-3">
+                            AqE264DnKyJci9kV4t3eYhDtFB3H88HQusWtH5odSqHM
+                        </div>
+                        
+                        <!-- User Wallet Input -->
+                        <input id="user-wallet" type="text" placeholder="PASTE YOUR WALLET ADDRESS" class="w-full bg-zinc-950 border border-zinc-800 p-3 rounded text-xs text-center text-white focus:border-rose-500 outline-none mb-3">
+                        
+                        <!-- Verify Button -->
                         <button id="verify-btn" onclick="verifyWhalePayment()" class="w-full bg-rose-600 hover:bg-rose-500 text-white py-3 rounded font-bold text-xs tracking-widest transition-all">
-                            VERIFY_ACCESS
+                            VERIFY ACCESS
                         </button>
-                        <p id="verification-log" class="text-[9px] text-zinc-600 uppercase h-4"></p>
+                        <p id="verification-log" class="text-[9px] text-zinc-600 uppercase h-4 mt-2"></p>
+                        
+                        <!-- Support Note -->
+                        <div class="text-[9px] text-zinc-600 mt-3 text-center italic">
+                            💡 Want to support more? Pay any amount above the minimum.
+                        </div>
                     </div>
                 </div>
 
@@ -97,6 +136,76 @@
     </div>
 
     <script>
+        // ============================================
+        // 🔥 PAY WHAT YOU WANT LOGIC
+        // ============================================
+        const MINIMUM_SOL = 0.05;
+        let selectedAmount = 0.1;
+        let solPrice = 0;
+        
+        async function fetchSolPrice() {
+            try {
+                const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/So11111111111111111111111111111111111111112');
+                const data = await res.json();
+                if (data.pairs && data.pairs[0]) {
+                    solPrice = parseFloat(data.pairs[0].priceUsd);
+                    updateUsdEquivalent();
+                }
+            } catch (e) {}
+        }
+        
+        function selectAmount(amount) {
+            selectedAmount = amount;
+            document.getElementById('selected-amount').innerText = `${amount} SOL`;
+            document.getElementById('custom-input-container').classList.add('hidden');
+            updateUsdEquivalent();
+            
+            // Update button styles
+            document.querySelectorAll('.price-btn').forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-rose-500');
+                if (parseFloat(btn.dataset.amount) === amount) {
+                    btn.classList.add('ring-2', 'ring-rose-500');
+                }
+            });
+        }
+        
+        function showCustomInput() {
+            document.getElementById('custom-input-container').classList.remove('hidden');
+            document.getElementById('custom-amount').focus();
+            document.querySelectorAll('.price-btn').forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-rose-500');
+            });
+            document.getElementById('custom-btn').classList.add('ring-2', 'ring-rose-500');
+        }
+        
+        function updateCustomAmount() {
+            const input = document.getElementById('custom-amount');
+            let value = parseFloat(input.value);
+            
+            if (isNaN(value) || value < MINIMUM_SOL) {
+                value = MINIMUM_SOL;
+            }
+            
+            selectedAmount = value;
+            document.getElementById('selected-amount').innerText = `${value.toFixed(2)} SOL`;
+            updateUsdEquivalent();
+        }
+        
+        function updateUsdEquivalent() {
+            if (solPrice > 0) {
+                const usd = (selectedAmount * solPrice).toFixed(2);
+                document.getElementById('usd-equivalent').innerText = `≈ $${usd} USD`;
+            }
+        }
+        
+        // Initialize
+        fetchSolPrice();
+        setInterval(fetchSolPrice, 30000);
+        selectAmount(0.1); // Default to suggested
+        
+        // ============================================
+        // 🔥 UNLOCK & VERIFICATION
+        // ============================================
         function unlockContent() {
             document.getElementById('content-locked').classList.add('hidden');
             document.getElementById('content-unlocked').classList.remove('hidden');
@@ -106,24 +215,39 @@
             const userWallet = document.getElementById('user-wallet').value.trim();
             const log = document.getElementById('verification-log');
             const btn = document.getElementById('verify-btn');
-            if (!userWallet) return;
+            
+            if (!userWallet) {
+                log.innerText = "Please enter your wallet address";
+                return;
+            }
+            
             btn.disabled = true;
             btn.innerText = "QUERYING...";
+            log.innerText = "Checking blockchain...";
             
             try {
                 const connection = new solanaWeb3.Connection("https://api.mainnet-beta.solana.com");
                 const publicKey = new solanaWeb3.PublicKey("AqE264DnKyJci9kV4t3eYhDtFB3H88HQusWtH5odSqHM");
-                const signatures = await connection.getSignaturesForAddress(publicKey, { limit: 10 });
+                const signatures = await connection.getSignaturesForAddress(publicKey, { limit: 20 });
+                
+                // Convert minimum SOL amount to lamports
+                const minLamports = Math.floor(MINIMUM_SOL * 1000000000); // 0.05 SOL minimum
                 
                 let found = false;
+                let foundAmount = 0;
+                
                 for (let sigInfo of signatures) {
                     const tx = await connection.getParsedTransaction(sigInfo.signature, { maxSupportedTransactionVersion: 0 });
                     if (tx && tx.meta && !tx.meta.err) {
                         for (let ix of tx.transaction.message.instructions) {
                             if (ix.program === "system" && ix.parsed?.type === "transfer") {
                                 const { info } = ix.parsed;
-                                if (info.source === userWallet && info.destination === "AqE264DnKyJci9kV4t3eYhDtFB3H88HQusWtH5odSqHM" && info.lamports >= 100000000) {
-                                    found = true; break;
+                                if (info.source === userWallet && 
+                                    info.destination === "AqE264DnKyJci9kV4t3eYhDtFB3H88HQusWtH5odSqHM" && 
+                                    info.lamports >= minLamports) {
+                                    found = true;
+                                    foundAmount = info.lamports / 1000000000;
+                                    break;
                                 }
                             }
                         }
@@ -131,15 +255,24 @@
                     if (found) break;
                 }
 
-                if (found) unlockContent();
-                else {
-                    log.innerText = "NO PAYMENT DETECTED";
+                if (found) {
+                    log.innerText = `✓ Payment confirmed: ${foundAmount} SOL`;
+                    log.classList.remove('text-zinc-600');
+                    log.classList.add('text-green-400');
+                    setTimeout(() => unlockContent(), 500);
+                } else {
+                    log.innerText = `No payment found (min ${MINIMUM_SOL} SOL)`;
+                    log.classList.remove('text-zinc-600');
+                    log.classList.add('text-red-400');
                     btn.disabled = false;
                     btn.innerText = "RETRY";
                 }
             } catch (err) {
-                log.innerText = "CONNECTION ERROR";
+                log.innerText = "Connection error. Please try again.";
+                log.classList.remove('text-zinc-600');
+                log.classList.add('text-yellow-400');
                 btn.disabled = false;
+                btn.innerText = "RETRY";
             }
         }
     </script>
