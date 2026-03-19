@@ -20,11 +20,6 @@
         }
         @keyframes moveScanline { 0% { top: 0; } 100% { top: 100vh; } }
         .nav-item.active { background-color: rgba(244, 63, 94, 0.1); border-right: 2px solid #f43f5e; color: #f43f5e; }
-        
-        /* Pricing Button Styles */
-        .price-btn { transition: all 0.2s ease; }
-        .price-btn:hover { transform: translateY(-2px); }
-        .price-btn.selected { ring: 2px; ring-color: #f43f5e; }
     </style>
 </head>
 <body class="min-h-screen bg-[#050505] p-2 sm:p-4 relative flex flex-col">
@@ -64,51 +59,36 @@
                     <h2 class="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4 neon-text tracking-tighter uppercase italic">Whale Movement Detected</h2>
                     <p class="text-xs md:text-sm text-zinc-500 mb-6 md:mb-8 leading-relaxed">Tracking top-tier agent wallets on Moltbook. Get instant alerts when the "Smart Money" moves.</p>
                     
-                    <!-- 🔥 PAY WHAT YOU WANT SECTION -->
+                    <!-- 🔥 SIMPLIFIED PAYMENT SECTION -->
                     <div id="pwyw-section" class="bg-gradient-to-b from-rose-900/20 to-zinc-900/50 p-4 md:p-6 rounded-lg border border-rose-500/30 text-left w-full shadow-lg mb-6">
-                        <div class="text-center mb-4">
+                        <div class="text-center mb-6">
                             <div class="text-lg text-white font-bold mb-1">Pay What You Want</div>
-                            <div class="text-[10px] text-rose-400 uppercase tracking-widest">Minimum 0.05 SOL • Lifetime Access</div>
+                            <div class="text-[10px] text-rose-400 uppercase tracking-widest">Lifetime Access</div>
                         </div>
                         
-                        <!-- Preset Amount Buttons -->
-                        <div class="grid grid-cols-4 gap-2 mb-4">
-                            <button onclick="selectAmount(0.05)" class="price-btn bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 p-3 rounded text-center" data-amount="0.05">
-                                <div class="text-[9px] text-zinc-400 uppercase">Min</div>
-                                <div class="text-sm text-white font-bold">0.05 SOL</div>
-                            </button>
-                            <button onclick="selectAmount(0.1)" class="price-btn bg-rose-600/20 hover:bg-rose-600/30 border border-rose-500/50 p-3 rounded text-center" data-amount="0.1">
-                                <div class="text-[9px] text-rose-400 uppercase">Suggested</div>
-                                <div class="text-sm text-white font-bold">0.1 SOL</div>
-                            </button>
-                            <button onclick="selectAmount(0.2)" class="price-btn bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 p-3 rounded text-center" data-amount="0.2">
-                                <div class="text-[9px] text-zinc-400 uppercase">Premium</div>
-                                <div class="text-sm text-white font-bold">0.2 SOL</div>
-                            </button>
-                            <button onclick="showCustomInput()" class="price-btn bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 p-3 rounded text-center" id="custom-btn">
-                                <div class="text-[9px] text-zinc-400 uppercase">Custom</div>
-                                <div class="text-sm text-white font-bold">💎</div>
-                            </button>
+                        <!-- Minimum Amount -->
+                        <div class="bg-zinc-950 p-4 rounded-lg border border-rose-500/30 mb-4 text-center">
+                            <div class="text-[10px] text-zinc-500 uppercase mb-2">Minimum</div>
+                            <div class="text-3xl text-rose-400 font-bold">0.05 SOL</div>
+                            <div id="usd-equivalent" class="text-[10px] text-zinc-500 mt-1">≈ $-- USD</div>
                         </div>
                         
-                        <!-- Custom Amount Input (hidden by default) -->
-                        <div id="custom-input-container" class="hidden mb-4">
-                            <input type="number" id="custom-amount" min="0.05" step="0.01" placeholder="Enter amount (min 0.05 SOL)" 
-                                   class="w-full bg-zinc-950 border border-rose-500/50 p-3 rounded text-sm text-white text-center focus:outline-none"
-                                   oninput="updateCustomAmount()">
-                            <div class="text-[9px] text-zinc-500 mt-1 text-center">Minimum 0.05 SOL required</div>
+                        <!-- Custom Amount Input -->
+                        <div class="mb-4">
+                            <label class="text-[10px] text-zinc-400 uppercase mb-2 block">Enter amount (0.05 SOL or more)</label>
+                            <input type="number" id="custom-amount" min="0.05" step="0.01" value="0.05" placeholder="0.05" 
+                                   class="w-full bg-zinc-950 border border-rose-500/50 p-4 rounded text-lg text-white text-center focus:outline-none focus:border-rose-400 font-bold"
+                                   oninput="updateAmount()">
                         </div>
                         
-                        <!-- Selected Amount Display -->
-                        <div class="bg-zinc-950 p-3 rounded border border-zinc-700 mb-3 text-center">
-                            <div class="text-[9px] text-zinc-500 uppercase mb-1">Selected Amount</div>
-                            <div id="selected-amount" class="text-2xl text-rose-400 font-bold">0.1 SOL</div>
-                            <div id="usd-equivalent" class="text-[10px] text-zinc-500">≈ $-- USD</div>
+                        <!-- Pay Button -->
+                        <div class="text-center mb-4">
+                            <div id="pay-message" class="text-sm text-rose-300 font-bold mb-2">Pay 0.05 SOL or more</div>
                         </div>
                         
                         <!-- Wallet Address -->
                         <div class="text-[9px] text-zinc-500 mb-1 uppercase font-bold">Send SOL to:</div>
-                        <div class="bg-zinc-950 p-2 rounded font-mono text-[9px] break-all text-rose-300 border border-rose-500/20 select-all mb-3">
+                        <div class="bg-zinc-950 p-3 rounded font-mono text-[9px] break-all text-rose-300 border border-rose-500/20 select-all mb-4">
                             AqE264DnKyJci9kV4t3eYhDtFB3H88HQusWtH5odSqHM
                         </div>
                         
@@ -120,11 +100,6 @@
                             VERIFY ACCESS
                         </button>
                         <p id="verification-log" class="text-[9px] text-zinc-600 uppercase h-4 mt-2"></p>
-                        
-                        <!-- Support Note -->
-                        <div class="text-[9px] text-zinc-600 mt-3 text-center italic">
-                            💡 Want to support more? Pay any amount above the minimum.
-                        </div>
                     </div>
                 </div>
 
@@ -137,10 +112,10 @@
 
     <script>
         // ============================================
-        // 🔥 PAY WHAT YOU WANT LOGIC
+        // 🔥 SIMPLIFIED PAYMENT LOGIC
         // ============================================
         const MINIMUM_SOL = 0.05;
-        let selectedAmount = 0.1;
+        let selectedAmount = 0.05;
         let solPrice = 0;
         
         async function fetchSolPrice() {
@@ -154,31 +129,7 @@
             } catch (e) {}
         }
         
-        function selectAmount(amount) {
-            selectedAmount = amount;
-            document.getElementById('selected-amount').innerText = `${amount} SOL`;
-            document.getElementById('custom-input-container').classList.add('hidden');
-            updateUsdEquivalent();
-            
-            // Update button styles
-            document.querySelectorAll('.price-btn').forEach(btn => {
-                btn.classList.remove('ring-2', 'ring-rose-500');
-                if (parseFloat(btn.dataset.amount) === amount) {
-                    btn.classList.add('ring-2', 'ring-rose-500');
-                }
-            });
-        }
-        
-        function showCustomInput() {
-            document.getElementById('custom-input-container').classList.remove('hidden');
-            document.getElementById('custom-amount').focus();
-            document.querySelectorAll('.price-btn').forEach(btn => {
-                btn.classList.remove('ring-2', 'ring-rose-500');
-            });
-            document.getElementById('custom-btn').classList.add('ring-2', 'ring-rose-500');
-        }
-        
-        function updateCustomAmount() {
+        function updateAmount() {
             const input = document.getElementById('custom-amount');
             let value = parseFloat(input.value);
             
@@ -187,7 +138,7 @@
             }
             
             selectedAmount = value;
-            document.getElementById('selected-amount').innerText = `${value.toFixed(2)} SOL`;
+            document.getElementById('pay-message').innerText = `Pay ${value.toFixed(2)} SOL or more`;
             updateUsdEquivalent();
         }
         
@@ -201,7 +152,6 @@
         // Initialize
         fetchSolPrice();
         setInterval(fetchSolPrice, 30000);
-        selectAmount(0.1); // Default to suggested
         
         // ============================================
         // 🔥 UNLOCK & VERIFICATION
@@ -230,8 +180,7 @@
                 const publicKey = new solanaWeb3.PublicKey("AqE264DnKyJci9kV4t3eYhDtFB3H88HQusWtH5odSqHM");
                 const signatures = await connection.getSignaturesForAddress(publicKey, { limit: 20 });
                 
-                // Convert minimum SOL amount to lamports
-                const minLamports = Math.floor(MINIMUM_SOL * 1000000000); // 0.05 SOL minimum
+                const minLamports = Math.floor(MINIMUM_SOL * 1000000000);
                 
                 let found = false;
                 let foundAmount = 0;
